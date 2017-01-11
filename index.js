@@ -26,6 +26,7 @@ bot.on("message", msg => {
         bot.voiceConnections.array().forEach( connection => {
           connection.disconnect();
         });
+        msg.delete();
       }
 
       if (msg.content.startsWith("!play")) {
@@ -51,6 +52,7 @@ bot.on("message", msg => {
     				break;
     			}
     		}
+        msg.delete();
       }
     }
 
