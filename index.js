@@ -41,6 +41,11 @@ bot.on("message", msg => {
             channel.join().then(connection => {
               const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
               const dispatcher = connection.playStream(stream, streamOptions);
+              dispatcher.on("end", reason => {
+                bot.voiceConnections.array().forEach( connection => {
+                  connection.disconnect();
+                });
+              });
             }).catch(console.error);
 
     				break;
