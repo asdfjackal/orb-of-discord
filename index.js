@@ -14,9 +14,9 @@ bot.on("message", msg => {
     }
 
     userIsDJ = false;
-    members = msg.guild.roles.filter('name',"DJ").array()[0].members;
+    members = msg.guild.roles.find('name',"DJ").members;
     members.forEach(member => {
-      if (member.user.id === msg.author.user.id) {
+      if (member.user.id === msg.author.id) {
         userIsDJ = true;
       }
     });
@@ -27,6 +27,7 @@ bot.on("message", msg => {
           connection.disconnect();
         });
       }
+
       if (msg.content.startsWith("!play")) {
         var url = msg.content.slice(5).trim();
 
