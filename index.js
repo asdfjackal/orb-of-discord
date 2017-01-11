@@ -14,7 +14,7 @@ bot.on("message", msg => {
     }
 
     userIsDJ = false;
-    members = msg.guild.roles.filter('name',"DJ").members;
+    members = msg.guild.roles.filter('name',"DJ").array()[0].members;
     members.forEach(member => {
       if (member.user.id === msg.author.user.id) {
         userIsDJ = true;
