@@ -7,7 +7,7 @@ const streamOptions = { seek: 0, volume: 1 };
 bot.on("message", msg => {
     if (msg.author.bot) return;
 
-    if !(msg.content.startsWith("!")) return;
+    if (!msg.content.startsWith("!")) return;
 
     if (msg.content.startsWith("!echo")) {
       msg.channel.sendMessage(msg.content.slice(5).trim())
