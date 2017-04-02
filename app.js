@@ -37,7 +37,7 @@ bot.on("message", msg => {
 
       if (msg.content.startsWith("!play")) {
         var args = msg.content.slice(5).trim()
-        url = args.slice(args.lastIndexOf(" ").trim());
+        url = args.slice(args.lastIndexOf(" ")).trim();
         channelName = args.substring(0,args.lastIndexOf(" ")).trim();
         console.log("url - " + url);
         console.log("channel - " + channelName);
