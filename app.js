@@ -36,13 +36,15 @@ bot.on("message", msg => {
       }
 
       if (msg.content.startsWith("!play")) {
-        var url = msg.content.slice(5).trim();
+        var args = msg.content.slice(5).trim().split(" ");
+        var url = args[1];
+        var channelName = args[0];
 
         var voiceChannel = null;
 
         for (var channel of msg.channel.guild.channels.array()) {
     			// If the channel is a voice channel, ...
-    			if (channel.type === 'voice') {
+    			if (channel.type === 'voice' && channel.name.startsWith(channelName)) {
             channel.join().then(connection => {
               const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
               const dispatcher = connection.playStream(stream, streamOptions);
@@ -52,6 +54,7 @@ bot.on("message", msg => {
                 });
               });
             }).catch(console.error);
+            break;
     			}
     		}
         msg.delete();
