@@ -36,9 +36,11 @@ bot.on("message", msg => {
       }
 
       if (msg.content.startsWith("!play")) {
-        var args = msg.content.slice(5).trim().split(" ");
-        var url = args[1];
-        var channelName = args[0];
+        var args = msg.content.slice(5).trim()
+        url = args.slice(args.lastIndexOf(" ").trim());
+        channelName = args.substring(0,args.lastIndexOf(" ")).trim();
+        console.log("url - " + url);
+        console.log("channel - " + channelName);
 
         var voiceChannel = null;
 
