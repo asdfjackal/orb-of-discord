@@ -28,37 +28,27 @@ bot.on("message", msg => {
     });
 
     if (userIsDJ){
+      var sender = msg.guild.members.get(msg.author.id);
+      if(sender) return;
+
+      var channel = sender.voiceChannel();
+      if(channel) return;
+
       if (msg.content.startsWith("!stop")) {
-        bot.voiceConnections.array().forEach( connection => {
-          connection.disconnect();
-        });
+        channel.connection.disconnect();
         msg.delete();
       }
 
       if (msg.content.startsWith("!play")) {
-        var args = msg.content.slice(5).trim()
-        var url = args.slice(args.lastIndexOf(" ")).trim();
-        var channelName = args.substring(0,args.lastIndexOf(" ")).trim();
-        console.log("url - " + url);
-        console.log("channel - " + channelName);
-
-        var voiceChannel = null;
-
-        for (var channel of msg.channel.guild.channels.array()) {
-    			// If the channel is a voice channel, ...
-    			if (channel.type === 'voice' && channel.name.startsWith(channelName)) {
-            channel.join().then(connection => {
-              const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
-              const dispatcher = connection.playStream(stream, streamOptions);
-              dispatcher.on("end", reason => {
-                bot.voiceConnections.array().forEach( connection => {
-                  connection.disconnect();
-                });
-              });
-            }).catch(console.error);
-            break;
-    			}
-    		}
+        channel.join().then(connection => {
+          const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
+          const dispatcher = connection.playStream(stream, streamOptions);
+          dispatcher.on("end", reason => {
+            bot.voiceConnections.array().forEach( connection => {
+              connection.disconnect();
+            });
+          });
+        }).catch(console.error);
         msg.delete();
       }
     }
