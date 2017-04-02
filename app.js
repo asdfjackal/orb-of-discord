@@ -29,26 +29,42 @@ bot.on("message", msg => {
 
     if (userIsDJ){
       var sender = msg.guild.members.get(msg.author.id);
-      if(sender) return;
+      if(!sender) return;
 
-      var channel = sender.voiceChannel();
-      if(channel) return;
+      var channel = sender.voiceChannel;
+      if(!channel){
+        msg.channel.sendMessage( msg.author.toString() + " must be in a voice channel to run that command.");
+        msg.delete();
+        return;
+      }
 
       if (msg.content.startsWith("!stop")) {
+        if(!channel.connection) return ;
         channel.connection.disconnect();
         msg.delete();
       }
 
       if (msg.content.startsWith("!play")) {
+        var url = msg.content.slice(5).trim();
+
+        bot.voiceConnections.array().forEach( connection => {
+          if(connection.channel.guild.id === msg.guild.id && connection.channel.id !== channel.id){
+            connection.disconnect();
+          }
+        });
+
         channel.join().then(connection => {
           const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
           const dispatcher = connection.playStream(stream, streamOptions);
+          msg.channel.sendMessage( msg.author.toString() + " playing " + url + " in " + channel.name);
           dispatcher.on("end", reason => {
-            bot.voiceConnections.array().forEach( connection => {
+            if(reason === "Stream is not generating quickly enough."){
               connection.disconnect();
-            });
+            }
           });
-        }).catch(console.error);
+        }).catch(error => {
+          console.log(error);
+        });
         msg.delete();
       }
     }
