@@ -13,10 +13,12 @@ bot.on("message", msg => {
 
     if (msg.content.startsWith("!echo")) {
       msg.channel.sendMessage(msg.content.slice(5).trim())
+      return;
     }
 
     if (msg.content.startsWith("!i")) {
       ImageSearch(bot, msg, msg.content.slice(3).split(' '));
+      return;
     }
 
     var userIsDJ = false;
@@ -27,7 +29,7 @@ bot.on("message", msg => {
       }
     });
 
-    if (userIsDJ){
+    if (userIsDJ && (msg.content.startsWith("!stop") || (msg.content.startsWith("!play"))){
       var sender = msg.guild.members.get(msg.author.id);
       if(!sender) return;
 
