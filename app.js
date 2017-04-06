@@ -29,7 +29,7 @@ bot.on("message", msg => {
       }
     });
 
-    if (userIsDJ && (msg.content.startsWith("!stop") || (msg.content.startsWith("!play"))){
+    if (userIsDJ && (msg.content.startsWith("!stop") || msg.content.startsWith("!play"))){
       var sender = msg.guild.members.get(msg.author.id);
       if(!sender) return;
 
