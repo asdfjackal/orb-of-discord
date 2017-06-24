@@ -12,6 +12,7 @@
     "discord.js": "^11.0.0",
     "google-images": "^2.1.0",
     "node-opus": "^0.2.4",
+    "youtube-search": "^1.0.10",
     "ytdl-core": "^0.10.1"
   },
   "devDependencies": {

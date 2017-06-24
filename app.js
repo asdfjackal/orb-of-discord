@@ -1,10 +1,16 @@
 import Discord from 'discord.js';
 import ytdl from 'ytdl-core';
+import YouTubeSearch from 'youtube-search';
 import ImageSearch from './imageSearch.js';
 
 const bot = new Discord.Client();
 
 const streamOptions = { seek: 0, volume: 1 };
+
+const opts = {
+  maxResults: 1,
+  key: process.env.GOOGLE_API_KEY,
+}
 
 bot.on("message", msg => {
     if (msg.author.bot) return;
@@ -12,13 +18,23 @@ bot.on("message", msg => {
     if (!msg.content.startsWith("!")) return;
 
     if (msg.content.startsWith("!echo")) {
-      msg.channel.sendMessage(msg.content.slice(5).trim())
+      msg.reply(msg.content.slice(5).trim())
       return;
     }
 
     if (msg.content.startsWith("!i")) {
       ImageSearch(bot, msg, msg.content.slice(3).split(' '));
       return;
+    }
+
+    if (msg.content.startsWith("!yt")) {
+      YouTubeSearch(msg.content.slice(3), opts, (err, results) => {
+        if (err){
+          msg.reply("There was an error when searching for videos");
+        }else{
+          msg.reply(results[0].link);
+        }
+      })
     }
 
     var userIsDJ = false;
@@ -35,7 +51,7 @@ bot.on("message", msg => {
 
       var channel = sender.voiceChannel;
       if(!channel){
-        msg.channel.sendMessage( msg.author.toString() + " must be in a voice channel to run that command.");
+        msg.reply("must be in a voice channel to run that command.");
         msg.delete();
         return;
       }
@@ -58,7 +74,7 @@ bot.on("message", msg => {
         channel.join().then(connection => {
           const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
           const dispatcher = connection.playStream(stream, streamOptions);
-          msg.channel.sendMessage( msg.author.toString() + " playing " + url + " in " + channel.name);
+          msg.reply(" playing " + url + " in " + channel.name);
           dispatcher.on("end", reason => {
             if(reason === "Stream is not generating quickly enough."){
               connection.disconnect();
