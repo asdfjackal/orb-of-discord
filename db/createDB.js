@@ -1,0 +1,4 @@
+import db from './dbBase';
+
+db.prepare("CREATE TABLE queue (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, guildID TEXT NOT NULL, song TEXT NOT NULL, added DATETIME NOT NULL);").run();
+db.prepare("CREATE TABLE quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, guildID TEXT NOT NULL, trigger TEXT NOT NULL, quote DATETIME NOT NULL);").run();
