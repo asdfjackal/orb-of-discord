@@ -183,7 +183,7 @@ bot.on("message", msg => {
         channel.join().then(connection => {
           const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
           const dispatcher = connection.playStream(stream, streamOptions);
-          msg.send("Playing " + url + " in " + channel.name);
+          msg.channel.send("Playing " + url + " in " + channel.name);
           dispatcher.on("debug", message => {
             console.log(message);
           });
