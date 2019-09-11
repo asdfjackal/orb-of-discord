@@ -10,14 +10,18 @@
   "license": "ISC",
   "dependencies": {
     "better-sqlite3": "^4.0.3",
-    "discord.js": "^11.0.0",
+    "discord.js": "^11.5.1",
     "google-images": "^2.1.0",
-    "node-opus": "^0.2.4",
+    "node-opus": "^0.3.2",
     "youtube-search": "^1.0.10",
-    "ytdl-core": "^0.20.1"
+    "ytdl-core": "^0.29.6",
+    "ytdl-core-discord": "^1.0.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-preset-latest": "^6.24.0"
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/plugin-transform-async-to-generator": "^7.5.0",
+    "@babel/preset-env": "^7.6.0"
   }
 }

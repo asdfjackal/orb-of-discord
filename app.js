@@ -1,11 +1,16 @@
 import Discord from 'discord.js';
-import ytdl from 'ytdl-core';
+import ytdl from 'ytdl-core-discord';
 import YouTubeSearch from 'youtube-search';
 import ImageSearch from './imageSearch.js';
 import { findQuote, listQuotes, createQuote, deleteQuote } from './db/quoteQueries.js';
 import { pushSong, popSong, clearQueue } from './db/queueQueries.js';
 
 const bot = new Discord.Client();
+
+
+bot.login(process.env.BOT_TOKEN);
+
+bot.on('debug', console.log)
 
 const streamOptions = { seek: 0, volume: 1 };
 
@@ -101,7 +106,7 @@ bot.on("message", msg => {
     }
 
     var userIsQuotes = false;
-    const quoteRole = msg.guild.roles.find('name',"addquotes");
+    const quoteRole = msg.guild.roles.find(x => x === "addquotes");
     if(quoteRole !== null){
       quoteRole.members.forEach(member => {
         if (member.user.id === msg.author.id) {
@@ -151,7 +156,7 @@ bot.on("message", msg => {
     }
 
     var userIsDJ = false;
-    const djRole = msg.guild.roles.find('name',"DJ");
+    const djRole = msg.guild.roles.find(x => x.name === "DJ");
     if (djRole !== null){
       djRole.members.forEach(member => {
         if (member.user.id === msg.author.id) {
@@ -180,18 +185,19 @@ bot.on("message", msg => {
 
         channel.leave();
 
-        channel.join().then(connection => {
-          const stream = ytdl(url, {filter : 'audioonly', quality: 'lowest'});
-          const dispatcher = connection.playStream(stream, streamOptions);
+        channel.join().then(async (connection) => {
+          // console.log(info)
+          const stream = await ytdl(url)
+          const dispatcher = await connection.playStream(stream);
           msg.channel.send("Playing " + url + " in " + channel.name);
           dispatcher.on("debug", message => {
             console.log(message);
           });
           dispatcher.on("end", reason => {
-            if(reason === "Stream is not generating quickly enough."){
-              playNextSong();
-            }
+            // console.log(reason)
+            playNextSong();
           });
+          dispatcher.on('error', console.error);
         }).catch(error => {
           console.log(error);
           return;
@@ -258,4 +264,3 @@ bot.on('ready', () => {
   console.log('Up and running...');
 });
 
-bot.login(process.env.BOT_TOKEN);
