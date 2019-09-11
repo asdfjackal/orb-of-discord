@@ -10,8 +10,6 @@ const bot = new Discord.Client();
 
 bot.login(process.env.BOT_TOKEN);
 
-bot.on('debug', console.log)
-
 const streamOptions = { seek: 0, volume: 1 };
 
 const opts = {
